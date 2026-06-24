@@ -1,0 +1,10 @@
+"use client"
+import { useState } from "react"
+import type { EmailSequenceStep } from "@/types"
+import { Plus, Trash2, GripVertical } from "lucide-react"
+export function SequenceBuilder({ steps, onChange }: { steps: EmailSequenceStep[]; onChange: (s: EmailSequenceStep[]) => void }) {
+  const add = () => { const n: EmailSequenceStep = { id: crypto.randomUUID(), step_number: steps.length + 1, template_id: "", delay_days: 1, condition: "opened" }; onChange([...steps, n]) }
+  const remove = (id: string) => onChange(steps.filter((s) => s.id !== id).map((s, i) => ({ ...s, step_number: i + 1 })))
+  const update = (id: string, field: string, value: unknown) => onChange(steps.map((s) => s.id === id ? { ...s, [field]: value } : s))
+  return (<div className="space-y-3">{steps.map((step, idx) => (<div key={step.id} className="bg-white rounded-lg border border-gray-200 p-4"><div className="flex items-center gap-3"><GripVertical className="w-4 h-4 text-gray-300" /><span className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-bold">{idx + 1}</span><div className="flex-1 grid grid-cols-3 gap-3"><select value={step.template_id} onChange={(e) => update(step.id, "template_id", e.target.value)} className="border rounded px-2 py-1 text-sm"><option value="">Select template</option></select><input type="number" value={step.delay_days} onChange={(e) => update(step.id, "delay_days", parseInt(e.target.value))} className="border rounded px-2 py-1 text-sm" placeholder="Delay (days)" /><select value={step.condition} onChange={(e) => update(step.id, "condition", e.target.value)} className="border rounded px-2 py-1 text-sm"><option value="opened">If opened</option><option value="not_opened">If not opened</option><option value="clicked">If clicked</option><option value="replied">If replied</option></select></div><button onClick={() => remove(step.id)} className="p-1 hover:bg-red-50 rounded text-red-400"><Trash2 className="w-4 h-4" /></button></div></div>))}<button onClick={add} className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"><Plus className="w-4 h-4" /> Add Step</button></div>)
+}

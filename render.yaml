@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: ai-crm-api
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-crm-db
+          property: connectionString
+      - key: REDIS_URL
+        fromRedis:
+          name: ai-crm-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AI_SERVICE_URL
+        value: http://ai-crm-ai:8001
+
+  - type: web
+    name: ai-crm-ai
+    env: docker
+    dockerfilePath: ai-service/Dockerfile
+    plan: starter
+    healthCheckPath: /api/v1/model/status
+    envVars:
+      - key: API_KEY
+        generateValue: true
+
+  - type: web
+    name: ai-crm-frontend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/.next
+    plan: starter
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://ai-crm-api.onrender.com
+
+databases:
+  - name: ai-crm-db
+    plan: free
+    databaseName: ai_crm
+    user: crm_user
+
+redis:
+  - name: ai-crm-redis
+    plan: free

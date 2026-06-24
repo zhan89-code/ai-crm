@@ -1,0 +1,14 @@
+{
+  "agent": "pm",
+  "status": "COMPLETED",
+  "timestamp": "2026-06-24T08:09:06.116563",
+  "file": "docs/crm-requirements.md",
+  "version": "2.0",
+  "changes": [
+    "Expanded AI Lead Scoring: 4 feature categories, ensemble model (XGBoost+ElasticNet+DNN), Platt calibration, SHAP explainability, drift detection",
+    "Added 5 email sequence templates with step-by-step cadences, personalization tokens, bounce handling, A/B testing",
+    "Added GDPR compliance: 6 DSAR rights, consent management, RoPA, DPIA",
+    "Added SOC 2 readiness controls across 5 trust criteria",
+    "Added breach notification SLA, cross-border transfers, retention schedule"
+  ]
+}

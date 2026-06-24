@@ -1,0 +1,13 @@
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+CREATE EXTENSION IF NOT EXISTS "citext";
+
+-- RLS helper function
+CREATE OR REPLACE FUNCTION current_tenant_id() RETURNS UUID AS 347
+BEGIN
+    RETURN current_setting(app.current_tenant, true)::UUID;
+EXCEPTION WHEN OTHERS THEN
+    RETURN NULL;
+END;
+347 LANGUAGE plpgsql STABLE;

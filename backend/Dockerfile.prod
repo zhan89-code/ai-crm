@@ -1,0 +1,13 @@
+FROM python:3.11-slim AS builder
+WORKDIR /app
+RUN apt-get update && apt-get install -y gcc libpq-dev
+COPY requirements.txt .
+RUN pip install --user -r requirements.txt
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY --from=builder /root/.local /root/.local
+ENV PATH=/root/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/Han/AppData/Local/Microsoft/WinGet/Links:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/java8path:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/apache-maven-3.9.11/bin:/mnt/c/Program Files/Java/jdk-25/bin:/mnt/c/Users/Han/AppData/Local/nvm:/mnt/c/nvm4w/nodejs:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/Han/AppData/Local/Programs/Python/Launcher/:/mnt/c/Users/Han/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files (x86)/Nmap:/mnt/c/Program Files/JetBrains/IntelliJ IDEA Community Edition 2025.2.4/bin:/mnt/c/Users/Han/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/Han/AppData/Roaming/npm:/mnt/c/Users/Han/AppData/Local/nvm:/mnt/c/nvm4w/nodejs:/mnt/c/Users/Han/AppData/Local/Microsoft/WinGet/Packages/Ngrok.Ngrok_Microsoft.Winget.Source_8wekyb3d8bbwe:/mnt/c/Users/Han/AppData/Local/Programs/Ollama:/mnt/c/Users/Han/.local/bin:/mnt/c/Users/Han/AppData/Local/Python/bin:/mnt/c/nvm4w/nodejs
+COPY . .
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
