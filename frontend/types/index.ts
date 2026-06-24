@@ -46,6 +46,7 @@ export interface Lead {
   tenant_id: string
   contact_id: string
   status: string
+  is_active: boolean
   source?: string
   score?: number
   score_label?: string
@@ -109,6 +110,7 @@ export interface EmailSequence {
   name: string
   description?: string
   status: string
+  is_active: boolean
   trigger_type: string
   entry_count: number
   created_by: string
@@ -144,6 +146,7 @@ export interface DashboardSummary {
   email_metrics: Record<string, number>
   model_health: {
     status: string
+  is_active: boolean
     auc: number
     psi: number
     last_retrain?: string
@@ -164,6 +167,7 @@ export interface CRMIntegration {
   tenant_id: string
   crm_type: string
   status: string
+  is_active: boolean
   config: Record<string, unknown>
   last_sync_at?: string
   created_at: string
@@ -180,6 +184,7 @@ export interface DSARRequest {
   tenant_id: string
   type: string
   status: string
+  is_active: boolean
   requested_by: string
   subject_email: string
   details: string
