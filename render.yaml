@@ -38,13 +38,12 @@ services:
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://ai-crm-api.onrender.com
-
 databases:
   - name: ai-crm-db
     plan: free
     databaseName: ai_crm
     user: crm_user
 
-redis:
-  - name: ai-crm-redis
+  - type: redis
+    name: ai-crm-redis
     plan: free
