@@ -110,6 +110,7 @@ export interface EmailSequenceStep {
   id: string
   sequence_id: string
   step_order: number
+  step_number: number
   template_id?: string
   delay_days: number
   condition?: string

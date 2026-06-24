@@ -18,8 +18,6 @@ if 'sslmode=' not in db_url and 'ssl=' not in db_url:
 if db_url.startswith('postgresql://'):
     db_url = db_url.replace('postgresql://', 'postgresql+asyncpg://', 1)
 
-logger.info(f'Connecting to database with URL: {db_url.split('@')[0].split(':')[0]}:***@{db_url.split('@')[1]}')
-
 engine = create_async_engine(
     db_url,
     echo=False,
@@ -30,6 +28,10 @@ engine = create_async_engine(
 )
 
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+async def get_db():
+    async with async_session() as session:
+        yield session
 
 class Base(DeclarativeBase):
     pass
