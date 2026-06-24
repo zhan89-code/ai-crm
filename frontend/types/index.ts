@@ -150,3 +150,17 @@ export interface CRMIntegration {
   updated_at: string
   deleted_at?: string
 }
+
+export interface DSARRequest {
+  id: string
+  tenant_id: string
+  type: string
+  status: string
+  requested_by: string
+  subject_email: string
+  details: string
+  due_date: string
+  completed_at?: string
+  created_at: string
+  updated_at: string
+}
