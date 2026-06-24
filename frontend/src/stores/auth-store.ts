@@ -9,6 +9,7 @@ interface AuthState {
   isLoading: boolean
   error: string | null
   login: (email: string, password: string) => Promise<void>
+  register: (fullName: string, email: string, password: string) => Promise<void>
   logout: () => void
   fetchMe: () => Promise<void>
   clearError: () => void
@@ -27,10 +28,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const res = await api.auth.login({ email, password })
       localStorage.setItem("access_token", res.access_token)
       localStorage.setItem("refresh_token", res.refresh_token)
-      const user = (await api.auth.me()) as User as User as User
+      const user = (await api.auth.me()) as User
       set({ user, access_token: res.access_token, refresh_token: res.refresh_token, isLoading: false })
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Login failed"
+      set({ error: message, isLoading: false })
+    }
+  },
+
+  register: async (fullName, email, password) => {
+    set({ isLoading: true, error: null })
+    try {
+      await api.auth.register({ full_name: fullName, email, password })
+      await get().login(email, password)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Registration failed"
       set({ error: message, isLoading: false })
     }
   },
@@ -43,7 +55,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   fetchMe: async () => {
     try {
-      const user = (await api.auth.me()) as User as User as User
+      const user = (await api.auth.me()) as User
       set({ user })
     } catch {
       get().logout()
