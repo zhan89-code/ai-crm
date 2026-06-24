@@ -6,10 +6,6 @@ services:
     plan: free
     healthCheckPath: /health
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: ai-crm-db
-          property: host
       - key: REDIS_PORT
         fromService:
           type: redis
@@ -56,9 +52,3 @@ services:
     ipAllowList:
       - source: 0.0.0.0/0
         description: allow all
-databases:
-  - name: ai-crm-db
-    plan: free
-    databaseName: ai_crm
-    user: crm_user
-

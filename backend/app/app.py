@@ -15,6 +15,7 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting up AI CRM API...")
+    logger.info(f"Using DATABASE_URL: {settings.DATABASE_URL.split("@")[0].split(":")[0]}:***@{settings.DATABASE_URL.split("@")[1]}")
     await init_db()
     yield
     logger.info("Shutting down...")
