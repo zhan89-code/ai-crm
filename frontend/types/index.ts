@@ -35,6 +35,10 @@ export interface Contact {
   created_at: string
   updated_at: string
   deleted_at?: string
+  enrolled_count?: number
+  step_count?: number
+  completion_rate?: number
+  conversion_rate?: number
 }
 
 export interface Lead {
@@ -75,6 +79,10 @@ export interface Deal {
   created_at: string
   updated_at: string
   deleted_at?: string
+  enrolled_count?: number
+  step_count?: number
+  completion_rate?: number
+  conversion_rate?: number
 }
 
 export interface EmailTemplate {
@@ -89,6 +97,10 @@ export interface EmailTemplate {
   created_at: string
   updated_at: string
   deleted_at?: string
+  enrolled_count?: number
+  step_count?: number
+  completion_rate?: number
+  conversion_rate?: number
 }
 
 export interface EmailSequence {
@@ -104,6 +116,10 @@ export interface EmailSequence {
   created_at: string
   updated_at: string
   deleted_at?: string
+  enrolled_count?: number
+  step_count?: number
+  completion_rate?: number
+  conversion_rate?: number
 }
 
 export interface EmailSequenceStep {
@@ -153,6 +169,10 @@ export interface CRMIntegration {
   created_at: string
   updated_at: string
   deleted_at?: string
+  enrolled_count?: number
+  step_count?: number
+  completion_rate?: number
+  conversion_rate?: number
 }
 
 export interface DSARRequest {
