@@ -42,6 +42,9 @@ services:
   - type: keyvalue
     name: ai-crm-redis
     plan: free
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: allow all
 databases:
   - name: ai-crm-db
     plan: free
