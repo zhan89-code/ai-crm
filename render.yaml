@@ -9,12 +9,22 @@ services:
       - key: DATABASE_URL
         fromDatabase:
           name: ai-crm-db
-          property: connectionString
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: ai-crm-redis
+          property: port
       - key: REDIS_URL
         fromService:
           type: redis
           name: ai-crm-redis
-          property: connectionString
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: ai-crm-redis
+          property: port
       - key: JWT_SECRET
         generateValue: true
       - key: AI_SERVICE_URL
