@@ -8,10 +8,17 @@ logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
-# Render provides postgresql:// but async engine needs postgresql+asyncpg://
 db_url = settings.DATABASE_URL
-if db_url.startswith("postgresql://") and "+asyncpg" not in db_url:
-    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+# Ensure ssl=require or sslmode=require is handled if not present in the URL
+if 'sslmode=' not in db_url and 'ssl=' not in db_url:
+    prefix = '?' if '?' not in db_url else '&'
+    db_url += f'{prefix}ssl=require'
+
+# Force conversion to asyncpg
+if db_url.startswith('postgresql://'):
+    db_url = db_url.replace('postgresql://', 'postgresql+asyncpg://', 1)
+
+logger.info(f'Connecting to database with URL: {db_url.split('@')[0].split(':')[0]}:***@{db_url.split('@')[1]}')
 
 engine = create_async_engine(
     db_url,
@@ -19,6 +26,7 @@ engine = create_async_engine(
     pool_size=20,
     max_overflow=10,
     pool_pre_ping=True,
+    connect_args={'ssl': 'require'}
 )
 
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -26,34 +34,16 @@ async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit
 class Base(DeclarativeBase):
     pass
 
-async def get_db():
-    async with async_session() as session:
-        try:
-            yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
-            raise
-        finally:
-            await session.close()
-
 async def init_db():
-    """Initialize database with retry logic for Render startup."""
-    max_retries = 5
+    max_retries = 10
     for attempt in range(max_retries):
         try:
             async with engine.begin() as conn:
                 await conn.run_sync(Base.metadata.create_all)
-            logger.info("Database tables created successfully")
+            logger.info('Database tables created successfully')
             return
         except Exception as e:
-            if attempt < max_retries - 1:
-                wait = 2 ** attempt
-                logger.warning(f"DB connection attempt {attempt + 1} failed: {e}. Retrying in {wait}s...")
-                await asyncio.sleep(wait)
-            else:
-                logger.error(f"DB connection failed after {max_retries} attempts: {e}")
-                raise
-
-async def close_db():
-    await engine.dispose()
+            wait = 2 ** attempt
+            if wait > 30: wait = 30
+            logger.warning(f'DB connection attempt {attempt + 1} failed: {e}. Retrying in {wait}s...')
+            await asyncio.sleep(wait)
