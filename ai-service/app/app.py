@@ -10,3 +10,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="AI Scoring Service", version="0.1.0", lifespan=lifespan)
 app.include_router(router)
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
