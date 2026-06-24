@@ -2,8 +2,7 @@ services:
   - type: web
     name: ai-crm-api
     env: docker
-    rootDir: backend
-    dockerfilePath: Dockerfile
+    dockerfilePath: backend/Dockerfile
     plan: free
     healthCheckPath: /health
     envVars:
@@ -23,8 +22,7 @@ services:
   - type: web
     name: ai-crm-ai
     env: docker
-    rootDir: ai-service
-    dockerfilePath: Dockerfile
+    dockerfilePath: ai-service/Dockerfile
     plan: free
     healthCheckPath: /api/v1/model/status
     envVars:
