@@ -10,6 +10,7 @@ export interface User {
   id: string
   email: string
   full_name: string
+  name: string
   role: string
   tenant_id: string
   avatar_url?: string
