@@ -63,6 +63,7 @@ export interface Deal {
   title: string
   stage: string
   amount: number
+  value: number
   probability?: number
   expected_close?: string
   actual_close?: string
