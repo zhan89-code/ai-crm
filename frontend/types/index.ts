@@ -31,6 +31,7 @@ export interface Contact {
   source?: string
   tags: string[]
   custom_fields: Record<string, unknown>
+  contact?: Contact
   created_at: string
   updated_at: string
   deleted_at?: string
@@ -70,6 +71,7 @@ export interface Deal {
   owner_id?: string
   pipeline_id?: string
   custom_fields: Record<string, unknown>
+  contact?: Contact
   created_at: string
   updated_at: string
   deleted_at?: string
