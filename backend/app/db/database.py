@@ -3,28 +3,32 @@ from sqlalchemy.orm import DeclarativeBase
 from app.core.config import get_settings
 import asyncio
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
-db_url = settings.DATABASE_URL
-# Ensure ssl=require or sslmode=require is handled if not present in the URL
-if 'sslmode=' not in db_url and 'ssl=' not in db_url:
-    prefix = '?' if '?' not in db_url else '&'
-    db_url += f'{prefix}ssl=require'
+# Use the environment variable directly to avoid Pydantic issues
+db_url = os.environ.get('DATABASE_URL', settings.DATABASE_URL)
 
-# Force conversion to asyncpg
-if db_url.startswith('postgresql://'):
-    db_url = db_url.replace('postgresql://', 'postgresql+asyncpg://', 1)
+logger.info(f'Using DATABASE_URL: {db_url.split('@')[0].split(':')[0]}:***@{db_url.split('@')[1] if '@' in db_url else 'unknown'}')
+
+# Handle SSL args manually for safer connection
+connect_args = {'ssl': 'require'}
+
+# Clean URL for SQLAlchemy if it contains query params
+base_url = db_url.split('?')[0]
+if base_url.startswith('postgresql://'):
+    base_url = base_url.replace('postgresql://', 'postgresql+asyncpg://', 1)
 
 engine = create_async_engine(
-    db_url,
+    base_url,
     echo=False,
     pool_size=20,
     max_overflow=10,
     pool_pre_ping=True,
-    connect_args={'ssl': 'require'}
+    connect_args=connect_args
 )
 
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
