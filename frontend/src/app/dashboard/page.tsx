@@ -6,7 +6,7 @@ import { formatCurrency } from "@/lib/utils"
 import type { DashboardSummary } from "@/types"
 import { DollarSign, Users, TrendingUp, Mail, BrainCircuit, Activity } from "lucide-react"
 
-function StatCard({ title, value, icon: Icon, sub }) {
+function StatCard({ title, value, icon: Icon, sub }: { title: string; value: string | number; icon: any; sub?: string }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
       <div className="flex items-center justify-between">
