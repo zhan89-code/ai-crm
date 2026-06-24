@@ -166,6 +166,7 @@ export interface CRMIntegration {
   id: string
   tenant_id: string
   crm_type: string
+  provider: string
   status: string
   is_active: boolean
   config: Record<string, unknown>
