@@ -11,7 +11,7 @@ services:
           name: ai-crm-db
           property: connectionString
       - key: REDIS_URL
-        fromRedis:
+        fromDatabase:
           name: ai-crm-redis
           property: connectionString
       - key: JWT_SECRET
@@ -38,12 +38,13 @@ services:
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://ai-crm-api.onrender.com
+
+  - type: keyvalue
+    name: ai-crm-redis
+    plan: free
 databases:
   - name: ai-crm-db
     plan: free
     databaseName: ai_crm
     user: crm_user
 
-  - type: redis
-    name: ai-crm-redis
-    plan: free
