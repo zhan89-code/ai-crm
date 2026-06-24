@@ -3,7 +3,7 @@ services:
     name: ai-crm-api
     env: docker
     dockerfilePath: backend/Dockerfile
-    plan: starter
+    plan: free
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
@@ -23,7 +23,7 @@ services:
     name: ai-crm-ai
     env: docker
     dockerfilePath: ai-service/Dockerfile
-    plan: starter
+    plan: free
     healthCheckPath: /api/v1/model/status
     envVars:
       - key: API_KEY
@@ -34,7 +34,7 @@ services:
     env: node
     buildCommand: cd frontend && npm install && npm run build
     startCommand: cd frontend && npm start
-    plan: starter
+    plan: free
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://ai-crm-api.onrender.com
