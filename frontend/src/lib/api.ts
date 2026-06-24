@@ -36,7 +36,7 @@ export const api = {
   auth: {
     login: (data: { email: string; password: string }) =>
       request<{ access_token: string; refresh_token: string; expires_in: number }>("/api/v1/auth/login", { method: "POST", body: JSON.stringify(data) }),
-    register: (data: { name: string; slug: string; plan?: string }) =>
+    register: (data: { full_name: string; email: string; password: string }) =>
       request("/api/v1/auth/register", { method: "POST", body: JSON.stringify(data) }),
     me: () => request("/api/v1/auth/me"),
     refresh: (token: string) =>
