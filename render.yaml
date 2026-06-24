@@ -11,8 +11,9 @@ services:
           name: ai-crm-db
           property: connectionString
       - key: REDIS_URL
-        fromDatabase:
+        fromService:
           name: ai-crm-redis
+          type: keyvalue
           property: connectionString
       - key: JWT_SECRET
         generateValue: true
