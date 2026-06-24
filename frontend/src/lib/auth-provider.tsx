@@ -1,12 +1,12 @@
-"use client";
+"use client"
+import { useEffect } from "react"
+import { useAuthStore } from "@/stores/auth-store"
 
-import { ReactNode } from "react";
-import { useAuthStore } from "@/stores/auth-store";
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  if (!isAuthenticated) {
-    return null;
-  }
-  return <>{children}</>;
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const fetchMe = useAuthStore((s) => s.fetchMe)
+  const token = useAuthStore((s) => s.access_token)
+  useEffect(() => {
+    if (token) fetchMe()
+  }, [token, fetchMe])
+  return <>{children}</>
 }
