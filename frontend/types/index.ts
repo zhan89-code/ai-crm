@@ -182,9 +182,9 @@ export interface CRMIntegration {
 export interface DSARRequest {
   id: string
   tenant_id: string
-  type: string
+  request_type: string
   status: string
-  is_active: boolean
+  requester_email: string
   requested_by: string
   subject_email: string
   details: string
