@@ -33,7 +33,7 @@ services:
     name: ai-crm-frontend
     env: node
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/.next
+    startCommand: cd frontend && npm start
     plan: starter
     envVars:
       - key: NEXT_PUBLIC_API_URL
